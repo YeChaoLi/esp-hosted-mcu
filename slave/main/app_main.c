@@ -842,19 +842,33 @@ static void register_reset_pin(uint32_t gpio_num)
 	}
 }
 
+void led_timer_callback(TimerHandle_t xTimer)
+{
+	static uint32_t led_state = 0;
+    led_state = !led_state;
+    gpio_set_level(LED_GPIO_NUM, led_state);
+	// ESP_LOGI(TAG, "LED FLIP.");
+}
+
 void app_main()
 {
 	esp_err_t ret;
 	uint8_t capa = 0;
 	uint32_t ext_capa = 0;
 	uint8_t prio_q_idx = 0;
-	uint32_t led_level = 0;
+	TimerHandle_t led_timer = NULL;
 
 	print_firmware_version();
 	register_reset_pin(CONFIG_ESP_GPIO_SLAVE_RESET);
 	
 	gpio_reset_pin(LED_GPIO_NUM);
     gpio_set_direction(LED_GPIO_NUM, GPIO_MODE_OUTPUT);
+    led_timer = xTimerCreate(
+        "led_timer",
+		pdMS_TO_TICKS(1000),
+		pdTRUE,
+        (void *)0,
+        led_timer_callback);
 
 	capa = get_capabilities();
 	ext_capa = get_capabilities_ext();
@@ -931,12 +945,10 @@ void app_main()
 
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
 
+	xTimerStart(led_timer, 0);
+
 	while(!datapath) {
-
-		gpio_set_level(LED_GPIO_NUM, led_level);
-		led_level = !led_level;
-
-		vTaskDelay(1000);
+		vTaskDelay(10);
 	}
 
 	/* send capabilities to host */
