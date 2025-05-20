@@ -1,0 +1,20 @@
+{
+    "idf.pythonInstallPath": "C:\\Users\\charles.lee_formlabs\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
+    "idf.customExtraVars": {
+        "IDF_TARGET": "esp32c6"
+    },
+    "idf.openOcdConfigs": [
+        "board/esp32c6-ftdi.cfg"
+    ],
+    "idf.port": "/dev/ttyUSB0",
+    "idf.flashType": "UART",
+    "idf.portWin": "COM4",
+    "files.associations": {
+        "stats.h": "c",
+        "coprocessor_fw_version.h": "c",
+        "mempool.h": "c",
+        "protocomm_pserial.h": "c",
+        "slave_control.h": "c",
+        "slave_bt.h": "c"
+    }
+}

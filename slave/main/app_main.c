@@ -848,9 +848,13 @@ void app_main()
 	uint8_t capa = 0;
 	uint32_t ext_capa = 0;
 	uint8_t prio_q_idx = 0;
+	uint32_t led_level = 0;
 
 	print_firmware_version();
 	register_reset_pin(CONFIG_ESP_GPIO_SLAVE_RESET);
+	
+	gpio_reset_pin(LED_GPIO_NUM);
+    gpio_set_direction(LED_GPIO_NUM, GPIO_MODE_OUTPUT);
 
 	capa = get_capabilities();
 	ext_capa = get_capabilities_ext();
@@ -928,7 +932,11 @@ void app_main()
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
 
 	while(!datapath) {
-		vTaskDelay(10);
+
+		gpio_set_level(LED_GPIO_NUM, led_level);
+		led_level = !led_level;
+
+		vTaskDelay(1000);
 	}
 
 	/* send capabilities to host */

@@ -28,6 +28,7 @@
 #define MSEC_TO_USEC(x)                (x*1000)
 #define SEC_TO_USEC(x)                 (x*1000*1000)
 
+#define LED_GPIO_NUM (5)
 
 /* Stats CONFIG:
  *
